@@ -1,0 +1,56 @@
+openapi: 3.1.0
+info:
+  title: Indexer API
+  version: "1.0.0"
+  description: API for finding the index of a given non-negative integer value.
+paths:
+  /index/{value}:
+    get:
+      summary: Find the index of a number
+      operationId: findIndex
+      parameters:
+        - name: value
+          in: path
+          required: true
+          description: The non-negative integer value to find the index for.
+          example: 100
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        "200":
+          description: Index found successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindIndexOutput"
+        "400":
+          description: Bad Request - Invalid input.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: Not Found - Index not found.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "500":
+          description: Internal Server Error.
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    FindIndexOutput:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+          description: The index of the provided value.
+      required:
+        - index
