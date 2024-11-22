@@ -23,7 +23,7 @@ export default function App() {
   const findIndex = async (number: string) => {
     setLoading(true)
 
-    await fetch(`http://localhost:8080/index/${number}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_HOST}/index/${number}`, {
       method: 'GET',
       headers: { Accept: 'application/json, text/plain', },
     })
@@ -89,7 +89,7 @@ export default function App() {
                   Need to check APIs? Follow:&nbsp;
                 </span>
                 <a className="font-semibold text-sky-600" href="">
-                  http://localhost:8080/#
+                  {process.env.REACT_APP_BACKEND_HOST}/#
                 </a>
               </p>
             </div>
