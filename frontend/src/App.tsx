@@ -20,37 +20,36 @@ export default function App() {
     findIndex(number);
   };
 
-  const findIndex = (number: string) => {
+  const findIndex = async (number: string) => {
     setLoading(true)
 
-    // Add some timeout to simulate the delay.
-    setTimeout(() => fetch(`http://localhost:8080/index/${number}`, {
+    await fetch(`http://localhost:8080/index/${number}`, {
       method: 'GET',
       headers: { Accept: 'application/json, text/plain', },
     })
       .then((response: Response) => {
         if (response.ok)
-          return response.json();
+          return response.json().then((data: { index: number }) => setIndex(data.index))
         return response.text().then(text => setError(text));
       })
-      .then((data: { index: number }) => setIndex(data.index))
       .catch((error) => setError(`An error occurred: ${error}`))
-      .finally(() => setLoading(false)), 200)
+      .finally(() => setLoading(false))
   };
 
   return (
     <>
       <div className="bg-gray-100 ">
         <div className="flex min-h-screen items-center justify-center">
-          <form onSubmit={onSubmit} className="min-h-1/2 bg-gray-900 border border-gray-900 rounded-2xl">
+          <form onSubmit={onSubmit} className="min-h-1/2 bg-gray-900 border shadow-xl border-gray-900 rounded-2xl">
             <div className="mx-4 sm:mx-24 md:mx-24 lg:mx-36 flex items-center space-y-4 py-16 font-semibold text-gray-500 flex-col">
-              <h1 className="text-white text-2xl">
+              <h1 className="text-white text-3xl">
                 Find index of your number
               </h1>
               <input className="w-full p-2 bg-gray-900 rounded-md  border border-gray-700 focus:border-blue-700" type="number" placeholder="place your number..." name="number" defaultValue="300" />
               <input className="w-full p-2 bg-gray-900 rounded-md border border-gray-700 " type="text" readOnly placeholder="your number show up here..." value={index} />
-              <p className="w-full p-2 text-red-500">
-                {error}
+              <p className="w-full text-gray-500 text-sm">TIP: try to add negative number or set value to 10 to see validation errors</p>
+              <p className="w-full p-2 text-red-500 text-center">
+                {error === "" ? "" : "error: "} {error}
               </p>
               <button
                 type="submit"
